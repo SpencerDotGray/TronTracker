@@ -9,8 +9,11 @@ import json
 client = discord.Client()
 jontron_url = 'https://www.youtube.com/user/JonTronShow/videos'
 
-with open('./auth_tokens.json', 'r') as filein:
-    token = json.load(filein)['token'] 
+try:
+    with open('./auth_tokens.json', 'r') as filein:
+        token = json.load(filein)['token'] 
+except FileNotFoundError:
+    pass
 
 bot = commands.Bot(command_prefix="&")
 current_title = 'Simplifying Corporate Logos - JonTron'
