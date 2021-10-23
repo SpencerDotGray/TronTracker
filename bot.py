@@ -5,6 +5,7 @@ from datetime import datetime, time, timedelta
 import asyncio
 import requests
 import json
+import os
 
 client = discord.Client()
 jontron_url = 'https://www.youtube.com/user/JonTronShow/videos'
@@ -13,7 +14,7 @@ try:
     with open('./auth_tokens.json', 'r') as filein:
         token = json.load(filein)['token'] 
 except FileNotFoundError:
-    pass
+    token = os.environ.get('token')
 
 bot = commands.Bot(command_prefix="&")
 current_title = 'Simplifying Corporate Logos - JonTron'
