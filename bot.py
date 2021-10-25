@@ -38,60 +38,73 @@ date_mapper = {
 
 def get_jontron_video_title(content):
 
-    focused_content = content[ content.index('gridVideoRenderer'): ]
-    focused_content = focused_content[ focused_content.index('"text":') + len('"text":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    title_name = focused_content[ left:right ]
-    return title_name
+    try:
+        focused_content = content[ content.index('gridVideoRenderer'): ]
+        focused_content = focused_content[ focused_content.index('"text":') + len('"text":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        title_name = focused_content[ left:right ]
+        return title_name
+    except ValueError:
+        print('ERROR: could not get jontron video title\nSubstring did not work')
 
 
 def get_jontron_video_image_url(content):
 
-    focused_content = content[ content.index('gridVideoRenderer'): ]
-    focused_content = focused_content[ focused_content.index('"url":') + len('"url":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    picture_url = focused_content [ left:right ]
-    return picture_url
+    try:
+        focused_content = content[ content.index('gridVideoRenderer'): ]
+        focused_content = focused_content[ focused_content.index('"url":') + len('"url":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        picture_url = focused_content [ left:right ]
+        return picture_url
+    except ValueError:
+        print('ERROR: could not get jontron video image\nSubstring did not work')
 
 
 def get_jontron_video_date(content):
 
-    focused_content = content[ content.index('gridVideoRenderer'): ]
-    focused_content = focused_content[ focused_content.index('"text":') + len('"text":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    title_name = focused_content[ left:right ]
-    focused_content = focused_content[ focused_content.index('"url":') + len('"url":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    watch_url = f'https://www.youtube.com{focused_content [ left:right ]}'
+    try:
+        focused_content = content[ content.index('gridVideoRenderer'): ]
+        focused_content = focused_content[ focused_content.index('"text":') + len('"text":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        title_name = focused_content[ left:right ]
+        focused_content = focused_content[ focused_content.index('"url":') + len('"url":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        watch_url = f'https://www.youtube.com{focused_content [ left:right ]}'
 
-    results = requests.get(watch_url)
-    content = results.text
-    focused_content = content[ content.index('"dateText":{"simpleText":') + len('"dateText":{"simpleText":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    video_date = focused_content[ left:right ]
+        results = requests.get(watch_url)
+        content = results.text
+        focused_content = content[ content.index('"dateText":{"simpleText":') + len('"dateText":{"simpleText":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        video_date = focused_content[ left:right ]
 
-    month = date_mapper[video_date.split(' ')[0]]
-    date = video_date.replace(video_date.split(' ')[0], month)
-    date = datetime.strptime(date,"%B %d, %Y")
-    return date
+        month = date_mapper[video_date.split(' ')[0]]
+        date = video_date.replace(video_date.split(' ')[0], month)
+        date = datetime.strptime(date,"%B %d, %Y")
+        return date
+    except ValueError:
+        print('ERROR: could not get jontron video date\nSubstring did not work')
 
 
 def get_jontron_watch_url(content):
-    focused_content = content[ content.index('gridVideoRenderer'): ]
-    focused_content = focused_content[ focused_content.index('"text":') + len('"text":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    title_name = focused_content[ left:right ]
-    focused_content = focused_content[ focused_content.index('"url":') + len('"url":'): ]
-    left = focused_content.index('"')+1
-    right = focused_content[ focused_content.index('"')+1: ].index('"')+1
-    watch_url = f'https://www.youtube.com{focused_content [ left:right ]}'
-    return watch_url
+
+    try:
+        focused_content = content[ content.index('gridVideoRenderer'): ]
+        focused_content = focused_content[ focused_content.index('"text":') + len('"text":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        title_name = focused_content[ left:right ]
+        focused_content = focused_content[ focused_content.index('"url":') + len('"url":'): ]
+        left = focused_content.index('"')+1
+        right = focused_content[ focused_content.index('"')+1: ].index('"')+1
+        watch_url = f'https://www.youtube.com{focused_content [ left:right ]}'
+        return watch_url
+    except ValueError:
+        print('ERROR: could not get jontron video url\nSubstring did not work')
 
 def get_jontron():
     content = requests.get(jontron_url).text
