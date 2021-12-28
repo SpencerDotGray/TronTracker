@@ -130,16 +130,18 @@ async def upload_check_background_task():
     global current_title
 
     while True:
-        jontron = get_jontron()
-        if (current_title != jontron['title']):
-            await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
-            channel = bot.get_channel(channel_id)
-            video_em = discord.Embed()
-            video_em.set_image(url=jontron['image'])
-            await channel.send(f'JONTRON HAS UPLOADED\nTHIS IS NOT A DRILL!!!\n:rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light:\n{jontron["url"]}', embed=video_em)
-            current_title = jontron['title']
-        else:
-            print('No JonTron Upload :(')
+        if datetime.now().hour > 7 and datetime.now().hour < 10:
+            jontron = get_jontron()
+            if (current_title != jontron['title']):
+                await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
+                channel = bot.get_channel(channel_id)
+                video_em = discord.Embed()
+                video_em.set_image(url=jontron['image'])
+                await channel.send(f'JONTRON HAS UPLOADED\nTHIS IS NOT A DRILL!!!\n:rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light:\n{jontron["url"]}', embed=video_em)
+                current_title = jontron['title']
+            else:
+                print('No JonTron Upload :(')
+
         await asyncio.sleep(3600)
 
 
@@ -150,13 +152,16 @@ async def morning_upload_background_task():
         seconds = (tomorrow - now).total_seconds()  # Seconds until tomorrow (midnight)
         await asyncio.sleep(seconds)   # Sleep until tomorrow and then the loop will start 
     while True:
+        
         now = datetime.utcnow() # You can do now() or a specific timezone if that matters, but I'll leave it with utcnow
         target_time = datetime.combine(now.date(), WHEN)  # 6:00 PM today (In UTC)
         seconds_until_target = (target_time - now).total_seconds()
-        await asyncio.sleep(seconds_until_target)  # Sleep until we hit the target time
-        await called_once_a_day()  # Call the helper function that sends the message
+        if datetime.now().hour > 7 and datetime.now().hour < 10:
+            await asyncio.sleep(seconds_until_target)  # Sleep until we hit the target time
+            await called_once_a_day()  # Call the helper function that sends the message
         tomorrow = datetime.combine(now.date() + timedelta(days=1), time(0))
         seconds = (tomorrow - now).total_seconds()  # Seconds until tomorrow (midnight)
+
         await asyncio.sleep(seconds)   # Sleep until tomorrow and then the loop will start a new iteration
 
 
