@@ -171,6 +171,7 @@ async def JontronPlz(ctx):
 
 
 if __name__ == "__main__":
+    print(f'Back up and running.\nLatest Video: {os.environ.get("current_title")}')
     print(f'Running message at: {WHEN.hour}:{WHEN.minute}:{WHEN.second}')
     bot.loop.create_task(morning_upload_background_task())
     bot.loop.create_task(upload_check_background_task())
