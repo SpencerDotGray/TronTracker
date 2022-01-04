@@ -127,7 +127,7 @@ async def called_once_a_day():  # Fired every day
 async def upload_check_background_task():
 
     while True:
-        if datetime.now().hour > 7 and datetime.now().hour < 12:
+        if datetime.now().hour > 7 and datetime.now().hour < 21:
             jontron = get_jontron()
             if (os.environ.get('current_title') != jontron['title']):
                 await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
