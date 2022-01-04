@@ -127,19 +127,16 @@ async def called_once_a_day():  # Fired every day
 async def upload_check_background_task():
 
     while True:
-        if datetime.now().hour > 7 and datetime.now().hour < 21:
-            jontron = get_jontron()
-            if (os.environ.get('current_title') != jontron['title']):
-                await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
-                channel = bot.get_channel(channel_id)
-                video_em = discord.Embed()
-                video_em.set_image(url=jontron['image'])
-                await channel.send(f'JONTRON HAS UPLOADED\nTHIS IS NOT A DRILL!!!\n:rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light:\n{jontron["url"]}', embed=video_em)
-                os.environ['current_title'] = jontron['title']
-            else:
-                print('No JonTron Upload :(')
+        jontron = get_jontron()
+        if (os.environ.get('current_title') != jontron['title']):
+            await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
+            channel = bot.get_channel(channel_id)
+            video_em = discord.Embed()
+            video_em.set_image(url=jontron['image'])
+            await channel.send(f'JONTRON HAS UPLOADED\nTHIS IS NOT A DRILL!!!\n:rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light:\n{jontron["url"]}', embed=video_em)
+            os.environ['current_title'] = jontron['title']
         else:
-            print(f'Not within checking time')
+            print('No JonTron Upload :(')
 
         await asyncio.sleep(3600)
 
