@@ -17,7 +17,6 @@ except FileNotFoundError:
     token = os.environ.get('token')
 
 bot = commands.Bot(command_prefix="&")
-current_title = 'Simplifying Corporate Logos - JonTron'
 WHEN = time(16, 00, 00)  # 12:00 PM
 channel_id = 290915716255711232 # Put your channel id here
 date_mapper = {
@@ -127,18 +126,16 @@ async def called_once_a_day():  # Fired every day
 
 async def upload_check_background_task():
 
-    global current_title
-
     while True:
-        if datetime.now().hour > 7 and datetime.now().hour < 10:
+        if datetime.now().hour > 7 and datetime.now().hour < 12:
             jontron = get_jontron()
-            if (current_title != jontron['title']):
+            if (os.environ.get('current_title') != jontron['title']):
                 await bot.wait_until_ready()  # Make sure your guild cache is ready so the channel can be found via get_channel
                 channel = bot.get_channel(channel_id)
                 video_em = discord.Embed()
                 video_em.set_image(url=jontron['image'])
                 await channel.send(f'JONTRON HAS UPLOADED\nTHIS IS NOT A DRILL!!!\n:rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light::rotating_light:\n{jontron["url"]}', embed=video_em)
-                current_title = jontron['title']
+                os.environ['current_title'] = jontron['title']
             else:
                 print('No JonTron Upload :(')
 
