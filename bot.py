@@ -138,6 +138,8 @@ async def upload_check_background_task():
                 os.environ['current_title'] = jontron['title']
             else:
                 print('No JonTron Upload :(')
+        else:
+            print(f'Not within checking time')
 
         await asyncio.sleep(3600)
 
